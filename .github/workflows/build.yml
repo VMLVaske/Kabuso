@@ -24,7 +24,3 @@ jobs:
       - run: node src/cli.js test
       - run: yarn lint
       - run: yarn coverage
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
