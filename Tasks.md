@@ -8,12 +8,16 @@
 * ~~Copy paste the code repo~~
 
 * update solidity version of smart contracts
-    * * running on 0.7.0 rn, current version is 0.8.26
+* * copy paste smart contracts from contract folder to remix
+* * update solidity version in the contracts
+* * * running on 0.7.0 rn, current version is 0.8.26
+* * compile + see if it works or if there's compiler errors popping up
+* * * if there's errors popping up, try fixing them (google / solidity docs / chatgpt)
 
-* set up forge for testing in local testnet environment
-
-* replace truffle (/ ganache) with hardhat? / forge ? / foundry? or another local blockchain test environment
-* * adjust scripts to run on that new local environment
+* update truffle + ganache stuff
+* * set up foundry environment locally
+* * replace all of the truffle / ganache instances with foundry
+* * * might be more difficult, coz unforeseen interdependencies / high complexity?
 
 * figure out how to rolling deployment of contracts works
 * * speak with j about that
