@@ -1,16 +1,5 @@
-// https://tornado.cash
-/*
- * d888888P                                           dP              a88888b.                   dP
- *    88                                              88             d8'   `88                   88
- *    88    .d8888b. 88d888b. 88d888b. .d8888b. .d888b88 .d8888b.    88        .d8888b. .d8888b. 88d888b.
- *    88    88'  `88 88'  `88 88'  `88 88'  `88 88'  `88 88'  `88    88        88'  `88 Y8ooooo. 88'  `88
- *    88    88.  .88 88       88    88 88.  .88 88.  .88 88.  .88 dP Y8.   .88 88.  .88       88 88    88
- *    dP    `88888P' dP       dP    dP `88888P8 `88888P8 `88888P' 88  Y88888P' `88888P8 `88888P' dP    dP
- * ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
- */
-
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.7.0;
+pragma solidity ^0.8.26;
 
 interface IHasher {
   function MiMCSponge(uint256 in_xL, uint256 in_xR) external pure returns (uint256 xL, uint256 xR);
@@ -50,11 +39,7 @@ contract MerkleTreeWithHistory {
   /**
     @dev Hash 2 tree leaves, returns MiMC(_left, _right)
   */
-  function hashLeftRight(
-    IHasher _hasher,
-    bytes32 _left,
-    bytes32 _right
-  ) public pure returns (bytes32) {
+  function hashLeftRight(IHasher _hasher, bytes32 _left, bytes32 _right) public pure returns (bytes32) {
     require(uint256(_left) < FIELD_SIZE, "_left should be inside the field");
     require(uint256(_right) < FIELD_SIZE, "_right should be inside the field");
     uint256 R = uint256(_left);
@@ -67,7 +52,7 @@ contract MerkleTreeWithHistory {
 
   function _insert(bytes32 _leaf) internal returns (uint32 index) {
     uint32 _nextIndex = nextIndex;
-    require(_nextIndex != uint32(2)**levels, "Merkle tree is full. No more leaves can be added");
+    require(_nextIndex != uint32(2) ** levels, "Merkle tree is full. No more leaves can be added");
     uint32 currentIndex = _nextIndex;
     bytes32 currentLevelHash = _leaf;
     bytes32 left;

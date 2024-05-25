@@ -1,16 +1,5 @@
-// https://tornado.cash
-/*
- * d888888P                                           dP              a88888b.                   dP
- *    88                                              88             d8'   `88                   88
- *    88    .d8888b. 88d888b. 88d888b. .d8888b. .d888b88 .d8888b.    88        .d8888b. .d8888b. 88d888b.
- *    88    88'  `88 88'  `88 88'  `88 88'  `88 88'  `88 88'  `88    88        88'  `88 Y8ooooo. 88'  `88
- *    88    88.  .88 88       88    88 88.  .88 88.  .88 88.  .88 dP Y8.   .88 88.  .88       88 88    88
- *    dP    `88888P' dP       dP    dP `88888P8 `88888P8 `88888P' 88  Y88888P' `88888P8 `88888P' dP    dP
- * ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
- */
-
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.7.0;
+pragma solidity ^0.8.26;
 
 import "./MerkleTreeWithHistory.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
@@ -88,7 +77,14 @@ abstract contract Tornado is MerkleTreeWithHistory, ReentrancyGuard {
     require(
       verifier.verifyProof(
         _proof,
-        [uint256(_root), uint256(_nullifierHash), uint256(_recipient), uint256(_relayer), _fee, _refund]
+        [
+          uint256(_root),
+          uint256(_nullifierHash),
+          uint160(address(_recipient)), // Convert address payable to address, then to uint160
+          uint160(address(_relayer)), // Convert address payable to address, then to uint160
+          _fee,
+          _refund
+        ]
       ),
       "Invalid withdraw proof"
     );
@@ -99,12 +95,7 @@ abstract contract Tornado is MerkleTreeWithHistory, ReentrancyGuard {
   }
 
   /** @dev this function is defined in a child contract */
-  function _processWithdraw(
-    address payable _recipient,
-    address payable _relayer,
-    uint256 _fee,
-    uint256 _refund
-  ) internal virtual;
+  function _processWithdraw(address payable _recipient, address payable _relayer, uint256 _fee, uint256 _refund) internal virtual;
 
   /** @dev whether a note is already spent */
   function isSpent(bytes32 _nullifierHash) public view returns (bool) {
