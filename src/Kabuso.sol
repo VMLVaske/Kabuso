@@ -8,9 +8,11 @@ interface IVerifier {
   function verifyProof(bytes memory _proof, uint256[6] memory _input) external returns (bool);
 }
 
-abstract contract Tornado is MerkleTreeWithHistory, ReentrancyGuard {
+abstract contract Kabuso is MerkleTreeWithHistory, ReentrancyGuard {
   IVerifier public immutable verifier;
   uint256 public denomination;
+  address public factoryAddress;
+  uint public blocknumber = block.number;
 
   mapping(bytes32 => bool) public nullifierHashes;
   // we store all commitments just to prevent accidental deposits with the same commitment
@@ -30,11 +32,13 @@ abstract contract Tornado is MerkleTreeWithHistory, ReentrancyGuard {
     IVerifier _verifier,
     IHasher _hasher,
     uint256 _denomination,
-    uint32 _merkleTreeHeight
+    uint32 _merkleTreeHeight,
+    address _factoryAddress
   ) MerkleTreeWithHistory(_merkleTreeHeight, _hasher) {
     require(_denomination > 0, "denomination should be greater than 0");
     verifier = _verifier;
     denomination = _denomination;
+    factoryAddress = _factoryAddress;
   }
 
   /**
@@ -96,6 +100,9 @@ abstract contract Tornado is MerkleTreeWithHistory, ReentrancyGuard {
 
   /** @dev this function is defined in a child contract */
   function _processWithdraw(address payable _recipient, address payable _relayer, uint256 _fee, uint256 _refund) internal virtual;
+
+  /** @dev this function is defined in a child contract */
+  function reDeploy() public virtual;
 
   /** @dev whether a note is already spent */
   function isSpent(bytes32 _nullifierHash) public view returns (bool) {

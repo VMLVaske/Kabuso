@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
 
-import "./Tornado.sol";
+import "./Kabuso.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-contract ERC20Tornado is Tornado {
+contract ERC20Kabuso is Kabuso {
   using SafeERC20 for IERC20;
   IERC20 public token;
 
@@ -14,8 +14,9 @@ contract ERC20Tornado is Tornado {
     IHasher _hasher,
     uint256 _denomination,
     uint32 _merkleTreeHeight,
-    IERC20 _token
-  ) Tornado(_verifier, _hasher, _denomination, _merkleTreeHeight) {
+    IERC20 _token,
+    address _factoryAddress
+  ) Kabuso(_verifier, _hasher, _denomination, _merkleTreeHeight, _factoryAddress) {
     token = _token;
   }
 
@@ -45,4 +46,12 @@ contract ERC20Tornado is Tornado {
       }
     }
   }
+
+  function reDeploy() 
+  
+  public override {
+
+
+  }
+
 }

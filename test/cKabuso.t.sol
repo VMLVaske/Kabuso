@@ -4,18 +4,21 @@ import "forge-std/Test.sol";
 import {Verifier} from "src/Verifier.sol";
 import {IHasher} from "src/MerkleTreeWithHistory.sol";
 import {HuffDeployer} from "lib/foundry-huff/src/HuffDeployer.sol";
-import {ETHTornado} from "src/ETHTornado.sol";
+import {ETHKabuso} from "src/ETHKabuso.sol";
 
-contract TornadoTest is Test {
-    ETHTornado tornado;
-    uint256 etherFork;
+contract KabusoTest is Test {
+    EthKabuso kabuso;
+
+    IHasher deployedMiMCSponge =
+        IHasher(0x83584f83f26aF4eDDA9CBe8C730bc87C364b28fe);
+    address optimizedMiMCSpongeAddress;
 
     function setUp() public {
         etherFork = vm.createFork("https://api.securerpc.com/v1");
         vm.selectFork(etherFork);
 
-        // deploy the EthTornado Contract
-        tornado = new ETHTornado(
+        // deploy the EthKabuso Contract
+        tornado = new EthKabuso(
             new Verifier(),
             IHasher(0x83584f83f26aF4eDDA9CBe8C730bc87C364b28fe),
             1 ether,
@@ -23,7 +26,7 @@ contract TornadoTest is Test {
         );
     }
 
-    function testConsole() public {
+    function testConsole() public pure {
         console2.log("Hello, World!");
     }
 
