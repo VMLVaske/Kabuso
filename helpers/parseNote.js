@@ -34,21 +34,14 @@ function createDeposit({ nullifier, secret }) {
     return deposit
 }
 
-async function generateMerkleProof(deposit) {
+async function generateMerkleProof(deposit, entry) {
     // Get all deposit events from smart contract and assemble merkle tree from them
     console.log('Getting current state from tornado contract')
     //const events = await tornado.getPastEvents('Deposit', { fromBlock: 0, toBlock: 'latest' })
-    const events = ['0'];
-    /* const leaves = events
+    const events = entry;
+    const leaves = events
         .sort((a, b) => a.returnValues.leafIndex - b.returnValues.leafIndex) // Sort events in chronological order
-        .map(e => e.returnValues.commitment) */
-
-    let leaves;
-    try {
-        leaves = fs.readFileSync('./helpers/commitment.txt', 'utf8');
-    } catch (err) {
-        console.log("Error: ", err);
-    };
+        .map(e => e.returnValues.commitment)
     const tree = new merkleTree(MERKLE_TREE_HEIGHT, leaves)
 
     // Find current commitment in the tree
@@ -68,9 +61,9 @@ async function generateMerkleProof(deposit) {
     return { pathElements, pathIndices, root: tree.root() }
 }
 
-async function generateProof({ deposit, recipient, relayerAddress = 0, fee = 0, refund = 0 }) {
+async function generateProof({ deposit, recipient, entry, relayerAddress = 0, fee = 0, refund = 0 }) {
     // Compute merkle proof of our commitment
-    const { root, pathElements, pathIndices } = await generateMerkleProof(deposit)
+    const { root, pathElements, pathIndices } = await generateMerkleProof(deposit, entry)
 
     // Prepare circuit input
     const input = {
@@ -112,7 +105,6 @@ async function generateProof({ deposit, recipient, relayerAddress = 0, fee = 0, 
  * @param noteString the note
  */
 function parseNote(noteString) {
-    console.log("Notestring", noteString);
     const buf = Buffer.from(noteString, 'hex')
     const nullifier = bigInt.leBuff2int(buf.slice(0, 31))
     const secret = bigInt.leBuff2int(buf.slice(31, 62))
@@ -122,21 +114,22 @@ function parseNote(noteString) {
 
 function getNote() {
     try {
-        const noteString = fs.readFileSync('./noteString.txt', 'utf8');
+        const noteString = fs.readFileSync('./noteString.txt', 'hex');
         return noteString;
     } catch (err) {
         console.log(err);
     }
 }
 
-async function manage() {
+async function withdrawManager(withdrawer, entry) {
     const noteString = getNote();
     const deposit = parseNote(noteString);
-    const { proof, args } = await generateProof(deposit);
+    const { proof, args } = await generateProof(deposit, withdrawer, entry);
     console.log("Proof: ", proof);
     console.log("Args: ", args);
 }
 
 /* const { proof, args } = generateProof({ deposit, process.argv[2], refund }) */
 
-manage();
+//withdrawManager(withdrawer);
+withdrawManager("0x12344", entry)

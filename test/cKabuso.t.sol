@@ -85,14 +85,15 @@ contract KabusoTest is Test {
         // Start acting as the depositor
         vm.startPrank(withdrawer);
 
-        // Call the JavaScript script and get the result
-        string[] memory noteInputs = new string[](2);
-        noteInputs[0] = "node";
-        noteInputs[1] = "helpers/note.js";
-        /* noteInputs[2] = address(withdrawer); */
-
         // need to pass a list of recorded deposit events from the contract history to withdraw
         Vm.Log[] memory entries = vm.getRecordedLogs();
+
+        // Call the JavaScript script and get the result
+        string[] memory noteInputs = new string[](4);
+        noteInputs[0] = "node";
+        noteInputs[1] = "helpers/parseNote.js";
+        noteInputs[2] = address(withdrawer);
+        noteInputs[3] = entries[0].data;
 
         /*  bytes memory noteMem = vm.ffi(inputs);
         bytes32 note = abi.decode(noteMem, (bytes32)); */
