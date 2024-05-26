@@ -20,13 +20,13 @@ After doing the initial groundwork, we were able to run an up-to-date version of
 
 3. So then we modified the contracts.
 
-The idea is that the contract is able to re-deploy every 5000 blocks (~ every two weeks), so that it becomes available under a new address. This should make it harder for authorities to block or penalize interaction with the new contract address for the userbase.
+The idea is that the contract is able to re-deploy every 20160 blocks (~ every two weeks), so that it becomes available under a new address. This should make it harder for authorities to block or penalize interaction with the new contract address for the userbase.
 
 In order to achieve this, we had to make the following changes:
 
-- implement a counter that checks if 5000 blocks have passed
+- implement a counter that checks if 20160 blocks have passed
 - implement storage for redeploymentGasFees
-- after the passing of 5000 blocks + the accumulation of enough redeploymentGasFees, the redeploy-function becomes executable.
+- after the passing of 20160 blocks + the accumulation of enough redeploymentGasFees, the redeploy-function becomes executable.
 - when a user executes this function, a new contract will be created from a factory method
 - the funds from the old pools, as well as the list of previous commitments are send to the new contract ( => old deposits promises are still withdrawable in the new deployment)
 - deposit and withdraw function in the old contract get disabled ( => no funds can get locked in)
