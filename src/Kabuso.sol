@@ -12,7 +12,7 @@ abstract contract Kabuso is MerkleTreeWithHistory, ReentrancyGuard {
   IVerifier public immutable verifier;
   uint256 public denomination;
   address public factoryAddress;
-  
+  uint public blocknumber = block.number;
 
   mapping(bytes32 => bool) public nullifierHashes;
   // we store all commitments just to prevent accidental deposits with the same commitment
