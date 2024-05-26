@@ -20,7 +20,7 @@
 
 pragma solidity ^0.8.26;
 
-import "./Tornado.sol";
+import "./Kabuso.sol";
 
 library Pairing {
     uint256 constant PRIME_Q =

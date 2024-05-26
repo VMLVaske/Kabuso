@@ -1,15 +1,18 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
 
-import "./Tornado.sol";
+import "./Kabuso.sol";
+import "./KabusoFactory.sol";
 
-contract ETHTornado is Tornado {
+
+contract ETHKabuso is Kabuso {
   constructor(
     IVerifier _verifier,
     IHasher _hasher,
     uint256 _denomination,
-    uint32 _merkleTreeHeight
-  ) Tornado(_verifier, _hasher, _denomination, _merkleTreeHeight) {}
+    uint32 _merkleTreeHeight,
+    address _factoryAddress
+  ) Kabuso(_verifier, _hasher, _denomination, _merkleTreeHeight, _factoryAddress) {}
 
   function _processDeposit() internal override {
     require(msg.value == denomination, "Please send `mixDenomination` ETH along with transaction");
@@ -31,5 +34,13 @@ contract ETHTornado is Tornado {
       (success, ) = _relayer.call{ value: _fee }("");
       require(success, "payment to _relayer did not go thru");
     }
+  }
+
+  function reDeploy() 
+  
+  public override {
+
+  KabusoFactory factory = KabusoFactory(factoryAddress);
+  address newDeployAddress = factory.deploy(verifier, hasher, denomination, levels);
   }
 }
